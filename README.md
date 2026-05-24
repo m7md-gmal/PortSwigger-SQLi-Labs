@@ -152,3 +152,16 @@ This section focuses on detecting SQL Injection vulnerabilities through delayed 
 ## Notes
 Learned how response timing can reveal database behavior even without visible output.
 ```
+# PortSwigger SQLi Labs
+
+<p align="center">
+  <img src="images/progress.png" width="900">
+</p>
+
+## Topics Covered
+- Authentication Bypass
+- UNION-based SQL Injection
+- Blind SQL Injection
+- Time-delay Attacks
+- Out-of-band Exploitation
+

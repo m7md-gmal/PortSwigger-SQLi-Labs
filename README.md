@@ -154,9 +154,7 @@ Learned how response timing can reveal database behavior even without visible ou
 ```
 # PortSwigger SQLi Labs
 
-<p align="center">
-  <img src="images/progress.png" width="900">
-</p>
+<img src="images/Screenshot 2026-05-24 054714.png" width="900">
 
 ## Topics Covered
 - Authentication Bypass
@@ -164,4 +162,10 @@ Learned how response timing can reveal database behavior even without visible ou
 - Blind SQL Injection
 - Time-delay Attacks
 - Out-of-band Exploitation
+## Screenshots
 
+<img src="images/Screenshot 2026-05-24 054738.png" width="900">
+
+<img src="images/Screenshot 2026-05-24 054825.png" width="900">
+
+<img src="images/Screenshot 2026-05-24 054858.png" width="900">
